@@ -23,6 +23,7 @@ RUN pip install tensorflow
 RUN pip install numba
 RUN pip install pytest
 RUN pip install missingno
+RUN pip install jupyterlab_templates
 
 RUN apt-get -y install curl gnupg
 RUN curl -sL https://deb.nodesource.com/setup_12.x  | bash -
@@ -34,7 +35,16 @@ EXPOSE 8080
 
 RUN jupyter labextension install jupyterlab-plotly  --minimize=False --no-build
 RUN jupyter labextension install @aquirdturtle/collapsible_headings --minimize=False --no-build
+RUN jupyter labextension install @ijmbarr/jupyterlab_spellchecker --minimize=False --no-build
+RUN jupyter labextension install jupyterlab_templates --minimize=False --no-build
 RUN jupyter lab build --minimize=False
+
+RUN jupyter serverextension enable --py jupyterlab_templates
+
+RUN jupyter notebook --generate-config
+RUN echo "c.JupyterLabTemplates.template_dirs = ['/workdir/']" >> /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.JupyterLabTemplates.include_default = True" >> /root/.jupyter/jupyter_notebook_config.py
+RUN echo "c.JupyterLabTemplates.include_core_paths = True" >> /root/.jupyter/jupyter_notebook_config.py
 
 #COPY requirements.txt requirements.txt
 #RUN pip install -r requirements.txt

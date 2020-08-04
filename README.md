@@ -1,2 +1,2 @@
-# ProjectTemplate
+# Project Template
 Template data science project
