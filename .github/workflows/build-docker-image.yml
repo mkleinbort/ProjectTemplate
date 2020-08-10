@@ -1,0 +1,27 @@
+# We want to make sure the Dockerfile does build an image
+name: Test Docker Image Builds
+
+on:
+  push:
+    branches: [ master ]
+
+jobs:
+  build-image:
+    runs-on: ubuntu-latest
+
+    steps:
+    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+    - uses: actions/checkout@v2
+    - uses: docker/build-push-action@v1.1.0
+
+    # Runs the build.sh script
+    - name: Run build.sh
+      run: bash build.sh
+
+    # Runs a set of commands using the runners shell
+    - name: Test the start.sh script and then kill the container.
+      run: |
+        bash start.sh
+        docker kill $(docker ps -q)
+
+        
